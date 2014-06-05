@@ -26,20 +26,23 @@ module app_datepicker{
             };
         }));
         dp_widget.addDatePickerMenuItem("This Week (Sun-Today)",new datepicker_widget.Functionality(function(){
-
             return {
-                dateFormatted: moment().subtract('days', today.getDay()+1).format(dateFormat)+"#"+moment().subtract('days', 0).format(dateFormat)
+                dateFormatted: moment().subtract('days', today.getDay()).format(dateFormat)+"#"+moment().subtract('days', 0).format(dateFormat)
             };
         }));
         dp_widget.addDatePickerMenuItem("This Week (Mon-Today)",new datepicker_widget.Functionality(function(){
+            var day = today.getDay()-1;
+            if(today.getDay()<1){
+                day = today.getDay()+6;
+            }
             return {
-                dateFormatted: moment().subtract('days', today.getDay()).format(dateFormat)+"#"+moment().subtract('days', 0).format(dateFormat)
+                dateFormatted: moment().subtract('days', day).format(dateFormat)+"#"+moment().subtract('days', 0).format(dateFormat)
             };
         }));
 
         dp_widget.addDatePickerMenuItem("Last 7 days",new datepicker_widget.Functionality(function(){
             return {
-                dateFormatted: moment().subtract('days', 7).format(dateFormat)+"#"+moment().subtract('days', 0).format(dateFormat)
+                dateFormatted: moment().subtract('days', 6).format(dateFormat)+"#"+moment().subtract('days', 0).format(dateFormat)
             };
         }));
 
@@ -66,7 +69,7 @@ module app_datepicker{
 
         dp_widget.addDatePickerMenuItem("Last 14 days",new datepicker_widget.Functionality(function(){
             return {
-                dateFormatted: moment().subtract('days', 14).format(dateFormat)+"#"+moment().subtract('days', 0).format(dateFormat)
+                dateFormatted: moment().subtract('days', 13).format(dateFormat)+"#"+moment().subtract('days', 0).format(dateFormat)
             };
         }));
 
@@ -78,7 +81,7 @@ module app_datepicker{
 
         dp_widget.addDatePickerMenuItem("Last 30 days",new datepicker_widget.Functionality(function(){
             return {
-                dateFormatted: moment().subtract('days', 30).format(dateFormat)+"#"+moment().subtract('days', 0).format(dateFormat)
+                dateFormatted: moment().subtract('days', 29).format(dateFormat)+"#"+moment().subtract('days', 0).format(dateFormat)
             };
         }));
 
