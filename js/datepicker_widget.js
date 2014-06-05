@@ -39,15 +39,14 @@ var datepicker_widget;
         if (!options.container_class) {
             options.container_class = "datepicker";
         }
-        var datepicker = new DatePicker(options.container_id, options.container_class, options.dateFormat);
+        var datepicker = new DatePicker(options.container_id, options.container_class);
         return datepicker;
     }
     datepicker_widget.datepickerInstance = datepickerInstance;
 
     var DatePicker = (function () {
-        function DatePicker(container_id, container_class, dateFormat) {
+        function DatePicker(container_id, container_class) {
             var _this = this;
-            this.dateFormat = dateFormat;
             this.container_id = container_id;
             this.container_class = container_class;
             this.item_count = 0;
@@ -65,7 +64,8 @@ var datepicker_widget;
             this.datepicker_items.push(datepicker_item);
         };
 
-        DatePicker.prototype.init = function () {
+        DatePicker.prototype.init = function (selectedDate) {
+            this.selectedDate = selectedDate || "";
             jQuery(this.container_id).html("<span id=\"datepicker_date_placeholder\"></span><span class='datepicker_ddown_btn'>&#x25BC;</span>");
             jQuery(this.container_id).append("<input type='hidden' name='datepicker_date' value='' />");
             jQuery(this.container_id).append("<div class='datepickerwidget_popup'><ul id='" + this.popup_id + "'></ul></div>");
@@ -73,11 +73,19 @@ var datepicker_widget;
             var that = this;
             jQuery.each(this.datepicker_items, function (index, obj) {
                 var o = obj;
-                if (o.isActive()) {
+                that.initMenuItem(o);
+                if (o.isActive() && that.selectedDate === "") {
                     that.setItemInDatePicker(o);
                     jQuery("#" + o.item_id + " .icon_item").html("&nbsp; &nbsp; &#x2714;");
+                    jQuery("#" + o.item_id).addClass("datepicker_selected");
+                } else {
+                    var dateObject = o.getFunctionality().run();
+                    if (dateObject.dateFormatted == selectedDate && o.menuText != "Custom") {
+                        that.setItemInDatePicker(o);
+                        jQuery("#" + o.item_id + " .icon_item").html("&nbsp; &nbsp; &#x2714;");
+                        jQuery("#" + o.item_id).addClass("datepicker_selected");
+                    }
                 }
-                that.initMenuItem(o);
                 if (o.menuText == "Custom") {
                     that.initJqueryUiDatePickerFields(o);
                 }
@@ -87,7 +95,16 @@ var datepicker_widget;
 
         DatePicker.prototype.initJqueryUiDatePickerFields = function (item) {
             jQuery(this.container_id + " #datepicker_date_placeholder").html(item.menuText);
-            jQuery("#" + item.item_id).append("&nbsp;<input style='width: 80px;' type='text' name='custom_dp_from' value='' readonly /> &nbsp; <input style='width: 80px;' type='text' name='custom_dp_to' value='' readonly /> <button id='custom_dp_btn'>Ok</button>");
+            var default_from = "";
+            var default_to = "";
+            if (this.selectedDate != "") {
+                var split = this.selectedDate.split("#");
+                if (split.length == 2) {
+                    default_from = split[0];
+                    default_to = split[1];
+                }
+            }
+            jQuery("#" + item.item_id).append("&nbsp;<span><input style='width: 80px;' type='text' name='custom_dp_from' value='" + default_from + "' readonly /> &nbsp; <input style='width: 80px;' type='text' name='custom_dp_to' value='" + default_to + "' readonly /> <button id='custom_dp_btn'>Ok</button></span>");
 
             //var options = {};
             jQuery("#" + item.item_id + " input[name='custom_dp_from']").datepicker({
@@ -108,6 +125,7 @@ var datepicker_widget;
                 jQuery.each(that.datepicker_items, function (index, obj) {
                     var o = obj;
                     jQuery("#" + o.item_id + " .icon_item").html("");
+                    jQuery("#" + o.item_id).removeClass("datepicker_selected");
                     o.active = false;
                 });
                 jQuery(that.container_id + " #datepicker_date_placeholder").html(item.menuText);
@@ -118,6 +136,8 @@ var datepicker_widget;
 
                 //show date
                 jQuery('input[name="selected_date"]').val(jQuery('input[name="datepicker_date"]').val());
+                event.preventDefault();
+                return false;
             });
         };
 
@@ -143,10 +163,12 @@ var datepicker_widget;
                             jQuery("#" + o.item_id + " input[name='custom_dp_to']").val('');
                             jQuery("#" + o.item_id + " input[name='custom_dp_from']").val('');
                         }
+                        jQuery("#" + o.item_id).removeClass("datepicker_selected");
                         o.active = false;
                     });
                     item.active = true;
                     jQuery("#" + item.item_id + " .icon_item").html("&nbsp; &nbsp; &#x2714;");
+                    jQuery("#" + item.item_id).addClass("datepicker_selected");
                     that.setItemInDatePicker(item);
                     jQuery(".datepickerwidget_popup").hide();
 
