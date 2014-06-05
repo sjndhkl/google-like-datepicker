@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Datepicker Widget Like Google</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js" type="text/javascript"></script>
+
+    <script src="js/datepicker_widget.js" type="text/javascript"></script>
+    <script src="js/app.js" type="text/javascript"></script>
+    <style>
+        #datepicker_date_placeholder{
+            min-width: 200px;
+            display: inline-block;
+        }
+        .datepicker, .datepicker ul{
+            margin: 0;
+            padding: 0;
+        }
+        .datepicker,.datepicker_menuitem{
+            background-color: ghostwhite;
+            padding: 5px;
+            font-family: Arial,Helvetica;
+            border:1px solid gray;
+            position: relative;
+        }
+        .datepicker_menuitem{
+            border: 0px;
+            cursor: pointer;
+            cursor: hand;
+        }
+        .datepicker_ddown_btn{
+            display: inline-block;
+            padding: 0 2px 0 2px;
+            margin-left: 5px;
+            cursor: pointer;
+            cursor: hand;
+        }
+        .datepickerwidget_popup{
+            position: absolute;
+            top:30px;
+            width: 300px;
+        }
+    </style>
+
+</head>
+<body>
+   <p>
+       The datepicker uses various js libraries such as moment.js / jquery and datepicker js
+   </p>
+
+    <h3>Example here</h3>
+    <span id="datepicker_container">Date Picker here</span>
+   <br/><br/>
+    <input type="text" name="selected_date" />
+
+
+</body>
+</html>
